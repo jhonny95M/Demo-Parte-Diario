@@ -1,0 +1,238 @@
+<!-- <div class="container">
+    <h1>Iniciar Producción</h1>
+  
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+      <div class="form-group">
+        <label for="operacion">Operación:</label>
+        <input type="text" id="operacion" formControlName="operacion" (keydown)="operacionKeyDown($event)">
+        <button type="button" class="btn btn-primary" (click)="buscarOperacionClickAsync()">Buscar</button>
+      </div>
+  
+      <div class="form-group">
+        <label for="maquina">Máquina:</label>
+        <input type="text" id="maquina" formControlName="maquina" class="form-control form-control-lg">
+        <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block" (click)="cambiarMaquinaAsync()" [disabled]="!btnCambiarMaquinaEnabled">
+          <i class="pe-7s-search btn-icon-wrapper"></i>
+          Cambiar</button>
+      </div>
+  
+      <div class="form-group">
+        <label for="fecha">Fecha:</label>
+        <input type="text" id="fecha" class="form-control form-control-lg" formControlName="fecha" [disabled]="!txtFechaWrite">
+      </div>
+  
+      <div class="form-group">
+        <button type="button" class="mt-0 btn-icon btn btn-primary" (click)="buscarOperarioAsync()" [disabled]="!btnAgregarOperarioEnabled">Buscar Operario</button>
+        <button type="button" class="mt-0 mr-1 ml-1 btn-icon btn btn-secondary" (click)="operarioPlanificadorAsync()" [disabled]="!btnOperarioPlanificadorEnabled">Operario Planificador</button>
+        <button type="button" class="btn btn-primary" (click)="operarioTareaAsync()" [disabled]="!btnOperarioTareaEnabled">Operario Tarea</button>
+        <button type="button" class="btn btn-primary" (click)="agregarOperarioAsync()" [disabled]="!btnAgregarOperarioEnabled">Agregar Operario</button>
+      </div>
+  
+      <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+  </div> -->
+
+<!-- <HeadContent>
+    @if (environment.IsDevelopment())
+    {
+        <link href="css/table-grid.css" rel="stylesheet" />
+        <link href="css/input-search.css" rel="stylesheet" />
+    }else{
+        <link href="css/table-grid.min.css" rel="stylesheet" />
+        <link href="css/input-search.min.css" rel="stylesheet" />
+
+    }
+</HeadContent> -->
+<div>
+<p>{{ordenOperacion}}</p>
+</div>
+<form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <app-card TitleCard="INICIO DE PRODUCCIÓN">
+        <div class="form-row">
+            <div class="col-12">
+                <fieldset class="form-group border p-3 mb-1">
+                    <legend class="w-auto px-2" style="color: #545556; font-size: 1.1em;">Ingrese Proceso :
+                        TipoOrd-Numord-ItemProc</legend>
+                    <div class="form-group row mb-0 mb-md-1">
+                        <label class="col-12 col-md-2 col-form-label">OPERACION:</label>
+                        <div class="col-12 col-md-2">
+                            <div class="search-wrapper-production active">
+                                <div class="input-holder">
+                                    <!-- <input class="search-input" [(ngModel)]="OrdenOperacion" (keydown)="operacionKeyDown($event)" type="search"
+                                   onkeypress="numericKeyPress(event,true)" onpaste="numericOnPaste(event)" placeholder="1-12-5"
+                                   /> -->
+                                    <input class="search-input" [(ngModel)]="ordenOperacion"
+                                        [ngModelOptions]="{standalone: true}" (keydown)="operacionKeyDown($event)"
+                                        type="search" placeholder="1-12-5" />
+                                    <button type="button" (click)="buscarOperacionClickAsync()"
+                                        class="search-icon"><span></span></button>
+                                </div>
+                            </div>
+                            <!-- <ValidationMessageCustom For="@(() => OrdenParte.IdNumOrd)" /> -->
+                        </div>
+                        <div class="col-12 col-md-5 mt-2 mt-md-0">
+                            <input class="form-control form-control-lg" type="text" readonly
+                                value="{{formulario.get('desProceso')?.value}}" />
+                        </div>
+                        <div class="col-12 col-md-3">
+
+                            <input *ngIf="txtFechaWrite;else elstxtFechaWrite" type="date"
+                                class="form-control form-control-lg" formControlName="inicio" />
+                            <ng-template #elstxtFechaWrite>
+                                <div class=" mt-2">
+                                    <p class="widget-heading">
+                                        Hora:&nbsp;
+                                        <b
+                                            class="ml-4 ml-md-0 widget-numbers mt-0 fsize-2 text-danger">{{formulario.get('fechaActualSistema')?.value}}</b>
+                                    </p>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <label class="col-12 col-md-2 col-form-label">MAQUINA:</label>
+                        <div class="col-12 col-md-6">
+                            <input class="form-control form-control-lg" readonly
+                                value="{{formulario.get('desProcesoEje')?.value}}" />
+                            <!-- <ValidationMessageCustom For="@(() => OrdenParte.DesProcesoEje)" /> -->
+                        </div>
+                        <div *ngIf="btnCambiarMaquinaEnabled;else elsetBtnCambiarMaquinaEnabled"
+                            class="col-12 col-md-2">
+                            <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
+                                (click)="cambiarMaquinaAsync()">
+                                <i class="pe-7s-search btn-icon-wrapper"></i>Cambiar
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-primary btn-block"
+                                (click)="agregarMaquinaAsync()">
+                                <i class="pe-7s-plus btn-icon-wrapper"></i>Agregar Maquina
+                            </button>
+                        </div>
+                        <ng-template #elsetBtnCambiarMaquinaEnabled>
+                            <div class="col-12 col-md-2">
+                                <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
+                                    disabled>
+                                    <i class="pe-7s-search btn-icon-wrapper"></i>Cambiar
+                                </button>
+                            </div>
+                        </ng-template>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-12">
+                <fieldset class="form-group border p-3 mb-0">
+                    <legend class="w-auto px-2 mb-0" style="color: #545556; font-size: 1.1em;">Ingrese Operario</legend>
+                    <div class="form-group row mb-0 mb-md-1">
+                        <label class="col-12 col-md-2 col-form-label">CODIGO:</label>
+                        <div class="col-12 col-md-3   mb-2 mb-md-0">
+
+                            <div class="input-group">
+                                <input type="search" class="form-control" maxlength="7" placeholder="T000000"
+                                    formControlName="codOperario" (keydown)="operario_KeyDown($event)" />
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary" (click)="formBuscarAsync()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <button *ngIf="BtnAgregarOperarioEnabled;else BtnAgregarOperarioEnabled" type="button"
+                                (click)="buscarOperarioAsync()" class="mt-0 btn-icon btn btn-primary">
+                                Agregar &nbsp;
+                                <i class="lnr-users"></i>
+                            </button>
+                            <ng-template #BtnAgregarOperarioEnabled>
+                                <button type="button" disabled class="mt-0 btn-icon btn btn-primary">
+                                    Agregar &nbsp;
+                                    <i class="lnr-users"></i>
+                                </button>
+                            </ng-template>
+                            <button *ngIf="BtnOperarioPlanificadorEnabled;else BtnOperarioPlanificadorEnabled"
+                                type="button" (click)="operarioPlanificadorAsync()"
+                                class="mt-0 mr-1 ml-1 btn-icon btn btn-secondary">
+                                Operario Planificador
+                            </button>
+                            <ng-template #BtnOperarioPlanificadorEnabled>
+                                <button type="button" disabled class="mt-0 mr-1 ml-1 btn-icon btn btn-secondary">
+                                    Operario Planificador
+                                </button>
+                            </ng-template>
+                            <button *ngIf="BtnOperarioTareaEnabled;else BtnOperarioTareaEnabled" type="button"
+                                (click)="operarioTareaAsync()" class="mt-0 btn-icon btn btn-secondary">
+                                Operario tarea
+                            </button>
+                            <ng-template #BtnOperarioTareaEnabled>
+                                <button type="button" disabled class="mt-0 btn-icon btn btn-secondary">
+                                    Operario tarea
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-sm-12">
+                            <div class="mud-table mud-xs-table mud-table-sticky-header mud-elevation-0">
+                                <div class="mud-table-container">
+                                    <table class="thead-dark table-hover mud-table-root">
+                                        <thead class="mud-table-head">
+                                            <tr class="mud-table-row">
+                                                <th scope="col" class="mud-table-cell">Código</th>
+                                                <th scope="col" class="mud-table-cell">Nombres</th>
+                                                <th scope="col" class="mud-table-cell"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="mud-table-body" formArrayName="ordenProcesoOperarioDTOs">
+                                            <tr *ngFor="let item of ordenProcesoOperarioDTOs.controls;let i = index"
+                                                class="mud-table-row">
+                                                <td data-titulo="Código" scope="col" class="mud-table-cell">
+                                                    {{item.get('referencia')}}</td>
+                                                <td data-titulo="Nombres" scope="col" class="mud-table-cell">
+                                                    {{item.get('desReferencia')}}</td>
+                                                <td scope="col" class="w-80 mud-table-cell">
+                                                    <div class="d-flex justify-content-center">
+                                                        <button type="button"
+                                                            class="btn-block btn-icon btn-icon-only btn btn-danger"
+                                                            (click)="quitarOperario(i)">
+                                                            <i class="pe-7s-trash btn-icon-wrapper"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="d-flex justify-content-center">
+                                        <!-- <ValidationMessageCustom For="@(() => OrdenParte.OrdenProcesoOperarioDTOs)" /> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </app-card>
+    <div class="main-card mb-3 card">
+        <div class="no-gutters row">
+            <div class="col-md-12 col-xl-12">
+                <div class="widget-content row">
+                    <div class="col-6">
+                        <div class="widget-content-wrapper d-flex justify-content-left">
+                            <button type="submit" class="btn btn-lg btn-success btn-block"
+                                style="width: 12rem;height: 2.5rem;">GUARDAR</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="widget-content-wrapper d-flex justify-content-end">
+                            <button type="button" class="btn btn-lg btn-light btn-block"
+                                style="width: 12rem;height: 2.5rem;" (click)="regresar()">REGRESAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
