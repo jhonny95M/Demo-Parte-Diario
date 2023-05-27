@@ -21498,8 +21498,7 @@ legend {
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url(../fonts/fa-solid-900.eot);
-    src: url(../fonts/fa-solid-900.eot?#iefix) format("embedded-opentype"),url(../fonts/fa-solid-900.woff2) format("woff2"),url(../fonts/fa-solid-900.woff) format("woff"),url(../fonts/fa-solid-900.ttf) format("truetype"),url(../fonts/fa-solid-900.svg#fontawesome) format("svg")
+    src: url(../fonts/fa-solid-900.woff2) format("woff2"),url(../fonts/fa-solid-900.woff) format("woff"),url(../fonts/fa-solid-900.ttf) format("truetype")
 }
 
 .fa, .fas {
@@ -27474,8 +27473,7 @@ legend {
 
 @font-face {
     font-family: "Ionicons";
-    src: url(../fonts/ionicons.eot);
-    src: url(../fonts/ionicons.eot#iefix) format("embedded-opentype"),url(../fonts/ionicons.ttf) format("truetype"),url(../fonts/ionicons.woff) format("woff"),url(../fonts/ionicons.svg#Ionicons) format("svg");
+    src: url(../fonts/ionicons.ttf) format("truetype"),url(../fonts/ionicons.woff) format("woff");
     font-weight: normal;
     font-style: normal
 }
@@ -33781,7 +33779,7 @@ button.toast-close-button {
 }
 
 .slick-loading .slick-list {
-    background: #fff slick-image-url(assets/images/ajax-loader.gif) center center no-repeat
+    background: #fff center center no-repeat
 }
 
 .slick-prev, .slick-next {
@@ -35911,8 +35909,7 @@ div.fixed-table-scroll-outer {
 
 @font-face {
     font-family: 'Linearicons-Free';
-    src: url(../fonts/Linearicons-Free.eot);
-    src: url(../fonts/Linearicons-Free.eot?#iefixw118d) format("embedded-opentype"),url(../fonts/Linearicons-Free.woff2) format("woff2"),url(../fonts/Linearicons-Free.woff) format("woff"),url(../fonts/Linearicons-Free.ttf) format("truetype"),url(../fonts/Linearicons-Free.svg#Linearicons-Free) format("svg");
+    src: url(../fonts/Linearicons-Free.woff2) format("woff2"),url(../fonts/Linearicons-Free.woff) format("woff"),url(../fonts/Linearicons-Free.ttf) format("truetype");
     font-weight: normal;
     font-style: normal
 }
@@ -36611,8 +36608,7 @@ div.fixed-table-scroll-outer {
 
 @font-face {
     font-family: 'Pe-icon-7-stroke';
-    src: url(../fonts/Pe-icon-7-stroke.eot);
-    src: url(../fonts/Pe-icon-7-stroke.eot?#iefixd7yf1v) format("embedded-opentype"),url(../fonts/Pe-icon-7-stroke.woff) format("woff"),url(../fonts/Pe-icon-7-stroke.ttf) format("truetype"),url(../fonts/Pe-icon-7-stroke.svg#Pe-icon-7-stroke) format("svg");
+    src: url(../fonts/Pe-icon-7-stroke.woff) format("woff"),url(../fonts/Pe-icon-7-stroke.ttf) format("truetype");
     font-weight: normal;
     font-style: normal
 }
