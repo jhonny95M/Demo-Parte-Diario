@@ -96,7 +96,8 @@
                                 value="{{formulario.get('desProcesoEje')?.value}}" />
                             <!-- <ValidationMessageCustom For="@(() => OrdenParte.DesProcesoEje)" /> -->
                         </div>
-                        <div *ngIf="btnCambiarMaquinaEnabled;else elsetBtnCambiarMaquinaEnabled"
+                        <ng-template  *ngIf="btnCambiarMaquinaEnabled;else elsetBtnCambiarMaquinaEnabled">
+                        <div
                             class="col-12 col-md-2">
                             <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
                                 (click)="cambiarMaquinaAsync()">
@@ -109,10 +110,11 @@
                                 <i class="pe-7s-plus btn-icon-wrapper"></i>Agregar Maquina
                             </button>
                         </div>
+                    </ng-template>
                         <ng-template #elsetBtnCambiarMaquinaEnabled>
                             <div class="col-12 col-md-2">
                                 <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
-                                    disabled>
+                                    disabled="true">
                                     <i class="pe-7s-search btn-icon-wrapper"></i>Cambiar
                                 </button>
                             </div>
@@ -131,7 +133,8 @@
 
                             <div class="input-group">
                                 <input type="search" class="form-control" maxlength="7" placeholder="T000000"
-                                    formControlName="codOperario" (keydown)="operario_KeyDown($event)" />
+                                [(ngModel)]="codOperario"
+                                [ngModelOptions]="{standalone: true}" (keydown)="operario_KeyDown($event)" />
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-primary" (click)="formBuscarAsync()">
                                         <i class="fas fa-search"></i>
@@ -176,7 +179,7 @@
                     <div class="row mb-0">
                         <div class="col-sm-12">
                             <div class="mud-table mud-xs-table mud-table-sticky-header mud-elevation-0">
-                                <div class="mud-table-container">
+                                <div class="mud-table-container" >
                                     <table class="thead-dark table-hover mud-table-root">
                                         <thead class="mud-table-head">
                                             <tr class="mud-table-row">
@@ -185,13 +188,15 @@
                                                 <th scope="col" class="mud-table-cell"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="mud-table-body" formArrayName="ordenProcesoOperarioDTOs">
-                                            <tr *ngFor="let item of ordenProcesoOperarioDTOs.controls;let i = index"
+                                        <tbody class="mud-table-body" >
+                                            <tr  *ngFor="let item of ordenProcesoOperarioDTOs2.value;let i = index"
                                                 class="mud-table-row">
-                                                <td data-titulo="Código" scope="col" class="mud-table-cell">
-                                                    {{item.get('referencia')}}</td>
+                                                <td data-titulo="Código" scope="col" class="mud-table-cell" >
+                                                    {{item.referencia}}
+                                                </td>
                                                 <td data-titulo="Nombres" scope="col" class="mud-table-cell">
-                                                    {{item.get('desReferencia')}}</td>
+                                                    {{item.desReferencia}}
+                                                </td>
                                                 <td scope="col" class="w-80 mud-table-cell">
                                                     <div class="d-flex justify-content-center">
                                                         <button type="button"

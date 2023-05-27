@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder,FormGroup,Validators} from '@angular/forms'
+import {FormArray, FormBuilder,FormControl,FormGroup,Validators} from '@angular/forms'
 import { TipoReferenciaService } from '../services/tipo-referencia.service';
 import {MaquinaService} from '../services/maquina.service'
 import {OrdenParteService} from '../services/orden-parte.service'
@@ -7,6 +7,11 @@ import { AuthenticationService} from '../services/authentication.service'
 import {} from '@angular/platform-browser'
 import {ExceptionCustom }from '../common/exception/ExceptionCustom'
 import { OrdenParteDTO } from '../model/OrdenParteDTO';
+import { Observable } from 'rxjs';
+import { ErrorDialogComponent } from '../common/error-component/error-dialog/error-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { OrdenProcesoOperarioDTO } from '../model/OrdenProcesoOperarioDTO ';
+import { TrabajadorView } from '../model/TrabajadorView';
 
 
 @Component({
@@ -31,14 +36,16 @@ export class InicioProduccionComponent implements OnInit {
   };
   ExceptionData=ExceptionCustom;
   IsError=false;
-
+  codOperario! :string | null;
+  idEmpresa=1;
   
   constructor(
     private fb: FormBuilder,
     private tipoReferenciaService: TipoReferenciaService,
     private maquinaService: MaquinaService,
     private ordenParteService: OrdenParteService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -77,7 +84,7 @@ export class InicioProduccionComponent implements OnInit {
       ordenProcesoOperarioDTOs:this.fb.array([])
     });
   }
-  get ordenProcesoOperarioDTOs(): FormArray {
+  get ordenProcesoOperarioDTOs2(): FormArray {
     return this.formulario.get('ordenProcesoOperarioDTOs') as FormArray;
   }
   async operacionKeyDown(event: KeyboardEvent): Promise<void> {
@@ -88,8 +95,37 @@ export class InicioProduccionComponent implements OnInit {
       // this.txtFechaWrite = user.IsInRole('txtFecha');
     }
   }
-async operario_KeyDown(event:KeyboardEvent):Promise<void>{
-
+operario_KeyDown(event:KeyboardEvent):void{
+  if(event.key!="Enter")return;
+  try {
+    if (this.codOperario?.length !== 7) return;
+    this.ordenParteService.ObtenerTrabajador(this.idEmpresa, this.codOperario).subscribe((result : TrabajadorView)=>{
+      if(result!=null && !(this.formulario.get('ordenProcesoOperarioDTOs')?.value as OrdenProcesoOperarioDTO[]).some(c=>c.referencia===result.codTrab)){
+        let trab=new OrdenProcesoOperarioDTO();
+        trab.idCargoPro=1;
+        trab.referencia=result.codTrab;
+        trab.desReferencia= `${result.apePat} ${result.apeMat} ${result.nom}`;
+        const trabajador = this.fb.group({
+          referencia: [trab.referencia, Validators.required],
+          desReferencia: [trab.desReferencia, [Validators.required, Validators.email]],
+          // Agrega más propiedades si es necesario
+        });
+    
+        this.ordenProcesoOperarioDTOs2.push(trabajador);
+        // (this.formulario.get('ordenProcesoOperarioDTOs')?.value as OrdenProcesoOperarioDTO[]).push(trab);
+        console.log(this.ordenProcesoOperarioDTOs2.controls);
+        console.log(this.ordenProcesoOperarioDTOs2.value);
+        console.log(this.formulario.controls);
+        console.log(this.formulario.value);
+        this.codOperario = null;
+      }
+    },(error)=>{
+      console.log(error);
+    });
+  } catch (ex) {
+    console.log(ex);
+  }
+  
 }
 async formBuscarAsync():Promise<void>{
 
@@ -99,7 +135,7 @@ async formBuscarAsync():Promise<void>{
     await this.BuscarOperacionAsync();
     // console.log(this.formulario.get('operacion')?.value)
   }
-async BuscarOperacionAsync():Promise<void>{
+ BuscarOperacionAsync():void{
   try
             {
                 this.btnAgregarOperarioEnabled = false;
@@ -110,9 +146,13 @@ async BuscarOperacionAsync():Promise<void>{
                  this.ordenParteService.listarOrdenProcesoAsync(this.dataOperacion.IdEmpresa,
                     this.dataOperacion.IdTipOrd, this.dataOperacion.IdNumOrd, this.dataOperacion.ItemProceso)
                     .subscribe(ordendto=>{
+                      this.formulario.patchValue(ordendto);
                     console.log(ordendto);
                     },(error)=>{
                       console.log(error)
+                      const dialogRef = this.dialog.open(ErrorDialogComponent, {
+                        data: { message: error.error.message } // Pasa el mensaje de error al componente del diálogo
+                      });
                     });
                 // StateHasChanged();
                 // await JS.InvokeVoidAsync("disabledEnterForm");
