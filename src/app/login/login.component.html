@@ -20,14 +20,16 @@
                 </div>
               </ng-container>
               <ng-container *ngIf="!mostrarEmpresa;else mostrarEmpresaElse">
-                <form>
+                <form (ngSubmit)="validateUser">
                   <!-- <DataAnnotationsValidator />
                                   <ValidationSummary /> -->
+                                  <p>{{user.Pass}}</p>
                   <div class="form-row">
                     <div class="col-md-6">
                       <div class="position-relative form-group">
                         <label for="Dni" class="">Usuario</label>
-                        <input name="Dni" id="Dni" placeholder="Ingrese su usuario" type="text" class="form-control">
+                        <input name="Dni" id="Dni" placeholder="Ingrese su usuario" type="text" class="form-control" 
+                        [(ngModel)]="user.DNI" [ngModelOptions]="{standalone:true}">
                         <!-- <ValidationMessageCustom For="@(() => user.DNI)" /> -->
                       </div>
                     </div>
@@ -35,7 +37,7 @@
                       <div class="position-relative form-group">
                         <label for="examplePassword" class="">Password</label>
                         <input name="password" id="examplePassword" placeholder="Ingrese su contraseña" type="password"
-                          class="form-control">
+                          class="form-control" [(ngModel)]="user.Pass"  [ngModelOptions]="{standalone:true}">
                         <!-- <ValidationMessageCustom For="@(() => user.Pass)" /> -->
                       </div>
                     </div>

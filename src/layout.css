@@ -11200,7 +11200,7 @@ a, button, .btn {
     .app-header__logo .logo-src {
         height: 36px;
         width: 117px;
-        /* background: url(../images/logoLayaut.png); */
+        background: url(../images/logoLayaut.png); 
         background-repeat: no-repeat;
     }
 
@@ -11419,7 +11419,7 @@ a, button, .btn {
 }
 
 .app-header.header-text-light .app-header__logo .logo-src {
-    /* background: url(../images/logoLayaut.png); */
+    background: url(../images/logoLayaut.png);
     background-repeat: no-repeat;
 }
 
@@ -11503,7 +11503,7 @@ a, button, .btn {
 }
 
 .app-header.header-text-dark .app-header__logo .logo-src {
-    /* background: url(../images/logoLayaut.png); */
+    background: url(../images/logoLayaut.png); 
     background-repeat: no-repeat;
 }
 
@@ -11795,7 +11795,7 @@ a, button, .btn {
     }
 
     .app-sidebar.sidebar-text-light .app-header__logo .logo-src {
-        /* background: url(../images/logoLayaut.png); */
+        background: url(../images/logoLayaut.png); 
         background-repeat: no-repeat;
     }
 
@@ -21167,13 +21167,13 @@ legend {
 .app-logo {
     height: 36px;
     width: 117px;
-    /* background: url(../images/logoLayaut.png) */
+    background: url(../images/logoLayaut.png)
 }
 
 .app-logo-inverse {
     height: 23px;
     width: 97px;
-    /* background: url(../images/logo.png) */
+    background: url(../images/logo.png)
 }
 
 .app-login-box .app-logo {

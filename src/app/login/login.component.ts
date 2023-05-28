@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TypeLoading } from '../model/TypeLoading';
 import { PerfilEmpresaDTO } from '../interface/PerfilEmpresaDTO';
 import { AuthenticateRequest } from '../interface/AuthenticateRequest';
@@ -13,11 +13,11 @@ import { UsuarioResponse } from '../model/UsuarioResponse';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   isProduction: boolean = environment.production;
   mostrarEmpresa:boolean=false;
   sleepEmpresa:boolean=false;
-  loginMesssage!:string;
+  loginMesssage:string="";
   getTypeLoad=TypeLoading.BallBeat;
 
   disabled = true;
@@ -26,8 +26,18 @@ export class LoginComponent {
   user!:AuthenticateRequest;
   perfilEmpresaDTOs!:PerfilEmpresaDTO[];
   constructor(private userService:AuthenticationService,private router: Router){}
-  validarUserAndEmpresaAsync(): Observable<boolean> {
-    return this.userService.AthenticateByEmpresaAsync(this.user).pipe(
+  ngOnInit(): void {
+    this.user={
+      DNI:"",
+      Pass:"",
+      EmpSpeed:"EM",
+      IdEmpresa:0,
+      IdModulo:0,
+      IdUsuario:0
+    }
+  }
+  validarUserAndEmpresaAsync(): void {
+    this.userService.AthenticateByEmpresaAsync(this.user).pipe(
       map((returnedUser:UsuarioResponse) => {
         if (returnedUser != null) {
           // (AuthenticationStateProvider as State.AuthState).MarkUserAsAuthenticated(returnedUser);
@@ -65,6 +75,41 @@ export class LoginComponent {
     //   return false;
     // }
   }
+  validateUser(): void {
+    this.sleepEmpresa = true;
+    // customValidator.ClearErrors();
+  
+      this.userService.LoginAsync(this.user)
+      .subscribe((returnedUser:UsuarioResponse)=>{
+        this.user.IdUsuario = returnedUser.IdUsuario;
+        const perfilEmpresa = returnedUser.PerfilEmpresaDTOs;
+        if (!perfilEmpresa) {
+          this.loginMesssage = "Usuario o contraseña incorrecto";
+          return;
+        }
+        if (perfilEmpresa.length === 1) {
+          this.user.IdEmpresa = perfilEmpresa[0].IdEmpresa;
+          this.validarUserAndEmpresaAsync();
+        } else if (perfilEmpresa.length > 1) {
+          this.mostrarEmpresa = true;
+          this.perfilEmpresaDTOs = perfilEmpresa;
+          this.sleepEmpresa = false;
+        } else {
+          this.loginMesssage = "No tiene asignada una empresa";
+        }
+        this.disabled = true;
+        this.messageStyles = "color:green";
+        this.message = "The form has been processed.";
+      },(ex:any)=>{
+        this.disabled = true;
+        this.messageStyles = "color:red";
+        this.loginMesssage = ex.Message;
+        this.sleepEmpresa = false;
+      });
+      
+    
+  }
+  
   enviarListadoEmpresa(e:number){
     this.user.IdEmpresa = e;
     this.validarUserAndEmpresaAsync();

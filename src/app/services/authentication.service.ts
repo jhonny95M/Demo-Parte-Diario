@@ -16,4 +16,7 @@ export class AuthenticationService {
   AthenticateByEmpresaAsync(user:AuthenticateRequest|null):Observable<any>{
     return this.http.get<string[]>(`${this.apiUrl}/tipos`);
   }
+  LoginAsync(user:AuthenticateRequest|null):Observable<any>{
+    return this.http.get<string[]>(`${this.apiUrl}/tipos`);
+  }
 }
