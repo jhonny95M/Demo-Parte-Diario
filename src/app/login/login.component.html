@@ -1,0 +1,66 @@
+<div class="app-container app-theme-white body-tabs-shadow">
+  <div class="app-container">
+    <div class="h-100">
+      <div class="h-100 no-gutters row">
+        <div class="d-none d-lg-block col-lg-4">
+        <app-login-slide></app-login-slide>
+      </div>
+        <div class="h-100 d-flex bg-white justify-content-center align-items-center col-md-12 col-lg-8">
+          <div class="mx-auto app-login-box col-sm-12 col-md-10 col-lg-9">
+            <div class="app-logo"></div>
+            <h4 class="mb-0">
+              <span class="d-block">Bienvenido,</span>
+              <span>Inicie sesión con su cuenta.</span>
+            </h4>
+            <div class="divider row"></div>
+            <div>
+              <ng-container *ngIf="sleepEmpresa">
+                <div>
+                  <app-loading [typeLoad]="getTypeLoad"></app-loading>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!mostrarEmpresa;else mostrarEmpresaElse">
+                <form>
+                  <!-- <DataAnnotationsValidator />
+                                  <ValidationSummary /> -->
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <div class="position-relative form-group">
+                        <label for="Dni" class="">Usuario</label>
+                        <input name="Dni" id="Dni" placeholder="Ingrese su usuario" type="text" class="form-control">
+                        <!-- <ValidationMessageCustom For="@(() => user.DNI)" /> -->
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="position-relative form-group">
+                        <label for="examplePassword" class="">Password</label>
+                        <input name="password" id="examplePassword" placeholder="Ingrese su contraseña" type="password"
+                          class="form-control">
+                        <!-- <ValidationMessageCustom For="@(() => user.Pass)" /> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="position-relative form">
+                    <p style="color: red;text-align: center;"><em>{{loginMesssage}}</em></p>
+                  </div>
+                  <div class="position-relative form-check">
+                  </div>
+                  <div class="divider row"></div>
+                  <div class="d-flex align-items-center">
+                    <div class="ml-auto">
+                      <button class="btn btn-primary-ememsa btn-lg" type="submit">Inicie sesión</button>
+                    </div>
+                  </div>
+                </form>
+              </ng-container>
+              <ng-template #mostrarEmpresaElse>
+                <app-listado-empresa (OnAceptar)="enviarListadoEmpresa"
+                  [perfilEmpresaDTOs]="perfilEmpresaDTOs"></app-listado-empresa>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

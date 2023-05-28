@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { AuthenticateRequest } from '../interface/AuthenticateRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,9 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   getAuthenticationState(): Observable<any> {
-    return this.http.get<string[]>(`${this.apiUrl}/tipos`);;
+    return this.http.get<string[]>(`${this.apiUrl}/tipos`);
+  }
+  AthenticateByEmpresaAsync(user:AuthenticateRequest|null):Observable<any>{
+    return this.http.get<string[]>(`${this.apiUrl}/tipos`);
   }
 }
