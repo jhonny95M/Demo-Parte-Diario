@@ -1,0 +1,13 @@
+.h-100 {
+    height: 100vh !important;
+}
+
+.btn-primary-ememsa {
+    background-color: #f7b924;
+    border-color: #f7b924;
+    color: #000001;
+}
+
+    .btn-primary-ememsa:hover {
+        background-color: #e6b02e;
+    }

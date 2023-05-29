@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder,FormControl,FormGroup,Validators} from '@angular/forms'
+import {AbstractControl, FormArray, FormBuilder,FormControl,FormGroup,ValidationErrors,Validators} from '@angular/forms'
 import { TipoReferenciaService } from '../services/tipo-referencia.service';
 import {MaquinaService} from '../services/maquina.service'
 import {OrdenParteService} from '../services/orden-parte.service'
@@ -12,12 +12,14 @@ import { ErrorDialogComponent } from '../common/error-component/error-dialog/err
 import { MatDialog } from '@angular/material/dialog';
 import { OrdenProcesoOperarioDTO } from '../model/OrdenProcesoOperarioDTO ';
 import { TrabajadorView } from '../model/TrabajadorView';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-inicio-produccion',
   templateUrl: './inicio-produccion.component.html',
-  styleUrls: ['./inicio-produccion.component.css']
+  styleUrls: ['./inicio-produccion.component.css'],
+  providers: [DatePipe]
 })
 export class InicioProduccionComponent implements OnInit {
 
@@ -28,6 +30,7 @@ export class InicioProduccionComponent implements OnInit {
   btnOperarioTareaEnabled = false;
   txtFechaWrite = false;
   ordenOperacion='';
+ 
   dataOperacion={
     IdEmpresa:1,
     IdTipOrd:0,
@@ -45,23 +48,26 @@ export class InicioProduccionComponent implements OnInit {
     private maquinaService: MaquinaService,
     private ordenParteService: OrdenParteService,
     private authenticationService: AuthenticationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
+    
     this.createForm();
     this.checkFechaWriteAccess();
   }
 
-  createForm(): void {
+  createForm(): void {    
     this.formulario = this.fb.group({
+      ordenOperacion:['',Validators.required],
       operacion: ['', Validators.required],
       maquina: ['', Validators.required],
       codOperario:[''],
       fecha: [''],
       idEmpresa : [0],
       idTipOrd : [0],
-      idNumOrd : [0],
+      idNumOrd : new FormControl(0, [Validators.required,Validators.min(1)]),//['',Validators.required,Validators.min(1)],
       secuencia : [0],
       idCenCos : [0],
       idUsuario :[0],
@@ -81,16 +87,33 @@ export class InicioProduccionComponent implements OnInit {
       keyReferencia : [''],
       desProceso:[''],
       desProcesoEje:[''],
-      ordenProcesoOperarioDTOs:this.fb.array([])
+      ordenProcesoOperarioDTOs:this.fb.array([],Validators.required)
     });
   }
+  // myAsyncValidator(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+  //   return new Promise((resolve, reject) => {
+  //     // Lógica de validación asincrónica
+  //     // Puedes hacer una llamada HTTP, consultar una base de datos, etc.
+  
+  //     if () {
+  //       resolve(null); // No hay errores de validación
+  //     } else {
+  //       resolve({ asyncError: true }); // Error de validación asincrónica
+  //     }
+  //   });
+  // }
+  get horasFecha():string|null {
+    let fechaActualSistema = this.formulario.get('fechaActualSistema')?.value as Date;
+    return this.datePipe.transform(fechaActualSistema, 'HH:mm:ss');
+  }
+
   get ordenProcesoOperarioDTOs2(): FormArray {
     return this.formulario.get('ordenProcesoOperarioDTOs') as FormArray;
   }
-  async operacionKeyDown(event: KeyboardEvent): Promise<void> {
+  operacionKeyDown(event: KeyboardEvent): void {
     if (event.code === 'Enter') {
-      await this.buscarOperacionClickAsync();
-      const authState = await this.authenticationService.getAuthenticationState();
+      this.buscarOperacionClickAsync();
+     
       // const user = authState.User;
       // this.txtFechaWrite = user.IsInRole('txtFecha');
     }
@@ -130,9 +153,10 @@ operario_KeyDown(event:KeyboardEvent):void{
 async formBuscarAsync():Promise<void>{
 
 }
-  async buscarOperacionClickAsync(): Promise<void> {
+  buscarOperacionClickAsync(): void {
+    this.ordenOperacion=this.formulario.get('ordenOperacion')?.value;
     this.createForm();
-    await this.BuscarOperacionAsync();
+    this.BuscarOperacionAsync();
     // console.log(this.formulario.get('operacion')?.value)
   }
  BuscarOperacionAsync():void{
@@ -192,6 +216,7 @@ else if(ex instanceof Error){
 
 cargarIndicesOperacion() {
   const ordenSplit = this.ordenOperacion.split('-');
+  console.log(this.formulario.get('ordenOperacion')?.value);
   this.dataOperacion.IdTipOrd = parseInt(ordenSplit[0]);
   this.dataOperacion.IdNumOrd = parseInt(ordenSplit[1]);
   this.dataOperacion.ItemProceso = parseInt(ordenSplit[2]);
@@ -253,8 +278,9 @@ cargarIndicesOperacion() {
 async agregarMaquinaAsync():Promise<void>{
 
 }
-  async guardar(): Promise<void> {
-    // Lógica para guardar
+  guardar(): void {
+    if(!this.formulario.valid.valueOf())return;
+    console.log(this.formulario.value);
   }
 
   checkFechaWriteAccess(): void {

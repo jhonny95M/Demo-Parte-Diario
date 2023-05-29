@@ -7,6 +7,8 @@ import { TypeLoading } from 'src/app/model/TypeLoading';
   styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent {
-  @Input() typeLoad!: TypeLoading;
-  
+  @Input() typeLoad= TypeLoading.BallBeat;
+  getTypeLoadBallBeat(t:TypeLoading ):boolean{
+    return t==TypeLoading.BallBeat;
+  }
 }

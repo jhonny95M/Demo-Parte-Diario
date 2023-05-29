@@ -19,6 +19,10 @@ import { HomeComponent } from './home/home.component';
 import { LoginSlideComponent } from './login/login-slide/login-slide.component';
 import { LoadingComponent } from './common/loading/loading.component';
 import { ListadoEmpresaComponent } from './login/listado-empresa/listado-empresa.component';
+import { AppSettings } from './model/AppSettings';
+import { LoginLayoutComponent } from './layout/login-layout/login-layout.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,9 @@ import { ListadoEmpresaComponent } from './login/listado-empresa/listado-empresa
     HomeComponent,
     LoginSlideComponent,
     LoadingComponent,
-    ListadoEmpresaComponent
+    ListadoEmpresaComponent,
+    LoginLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,7 @@ import { ListadoEmpresaComponent } from './login/listado-empresa/listado-empresa
     BrowserAnimationsModule,
     MatDialogModule,
     MatIconModule,
+    CommonModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -55,6 +62,6 @@ import { ListadoEmpresaComponent } from './login/listado-empresa/listado-empresa
 })
 export class AppModule {}
  export function tokenGetter() {
-  return localStorage.getItem('token');
+  return localStorage.getItem(AppSettings.TOKEN);
 }
 

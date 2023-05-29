@@ -1,1 +1,14 @@
-<p>listado-empresa works!</p>
+<div class="form-inline">
+    <div class="form-group mb-2">
+        <label for="staticEmail2" class="">Empresa</label>
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        <select name="IdEmpresa" class="form-control" [(ngModel)]="idEmpresa">
+            <option value="-1">--Seleccione--</option>
+            <ng-container *ngFor="let item of perfilEmpresaDTOs">
+                <option [value]="item.IdEmpresa">{{item.NomEmpresa}}</option>
+            </ng-container>
+        </select>
+    </div>
+    <button (click)="onClick()" class="btn btn-primary-ememsa mb-2">Aceptar</button>
+</div>

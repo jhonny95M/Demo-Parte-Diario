@@ -1,1 +1,12 @@
-<p>loading works!</p>
+
+<ng-container [ngIf]="getTypeLoadBallBeat(typeLoad)">
+    <div class="loader-wrapper d-flex justify-content-center align-items-center">
+        <div class="loader">
+            <div class="ball-beat">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</ng-container>

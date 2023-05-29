@@ -44,9 +44,10 @@
     }
 </HeadContent> -->
 <div>
-<p>{{ordenOperacion}}</p>
+    <p>{{this.formulario.get('ordenOperacion')?.value}}</p>
 </div>
-<form [formGroup]="formulario" (ngSubmit)="guardar()">
+<form [formGroup]="formulario" (ngSubmit)="guardar()" #formDir="ngForm">
+    
     <app-card TitleCard="INICIO DE PRODUCCIÓN">
         <div class="form-row">
             <div class="col-12">
@@ -61,12 +62,15 @@
                                     <!-- <input class="search-input" [(ngModel)]="OrdenOperacion" (keydown)="operacionKeyDown($event)" type="search"
                                    onkeypress="numericKeyPress(event,true)" onpaste="numericOnPaste(event)" placeholder="1-12-5"
                                    /> -->
-                                    <input class="search-input" [(ngModel)]="ordenOperacion"
-                                        [ngModelOptions]="{standalone: true}" (keydown)="operacionKeyDown($event)"
-                                        type="search" placeholder="1-12-5" />
+                                    <input type="text" class="search-input" formControlName="ordenOperacion"
+                                         (keydown)="operacionKeyDown($event)"
+                                         placeholder="1-12-5" />
                                     <button type="button" (click)="buscarOperacionClickAsync()"
                                         class="search-icon"><span></span></button>
                                 </div>
+                            </div>
+                            <div *ngIf="formulario.get('ordenOperacion')?.invalid && (formulario.get('ordenOperacion')?.dirty || formulario.get('ordenOperacion')?.touched)">
+                                <em *ngIf="formulario.get('idNumOrd')?.errors?.['min']" class="validation-message" >El numero de Orden es requerido.</em>
                             </div>
                             <!-- <ValidationMessageCustom For="@(() => OrdenParte.IdNumOrd)" /> -->
                         </div>
@@ -83,7 +87,7 @@
                                     <p class="widget-heading">
                                         Hora:&nbsp;
                                         <b
-                                            class="ml-4 ml-md-0 widget-numbers mt-0 fsize-2 text-danger">{{formulario.get('fechaActualSistema')?.value}}</b>
+                                            class="ml-4 ml-md-0 widget-numbers mt-0 fsize-2 text-danger">{{horasFecha}}</b>
                                     </p>
                                 </div>
                             </ng-template>
@@ -96,21 +100,20 @@
                                 value="{{formulario.get('desProcesoEje')?.value}}" />
                             <!-- <ValidationMessageCustom For="@(() => OrdenParte.DesProcesoEje)" /> -->
                         </div>
-                        <ng-template  *ngIf="btnCambiarMaquinaEnabled;else elsetBtnCambiarMaquinaEnabled">
-                        <div
-                            class="col-12 col-md-2">
-                            <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
-                                (click)="cambiarMaquinaAsync()">
-                                <i class="pe-7s-search btn-icon-wrapper"></i>Cambiar
-                            </button>
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-primary btn-block"
-                                (click)="agregarMaquinaAsync()">
-                                <i class="pe-7s-plus btn-icon-wrapper"></i>Agregar Maquina
-                            </button>
-                        </div>
-                    </ng-template>
+                        <ng-container *ngIf="btnCambiarMaquinaEnabled;else elsetBtnCambiarMaquinaEnabled">
+                            <div class="col-12 col-md-2">
+                                <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
+                                    (click)="cambiarMaquinaAsync()">
+                                    <i class="pe-7s-search btn-icon-wrapper"></i>Cambiar
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-primary btn-block"
+                                    (click)="agregarMaquinaAsync()">
+                                    <i class="pe-7s-plus btn-icon-wrapper"></i>Agregar Maquina
+                                </button>
+                            </div>
+                        </ng-container>
                         <ng-template #elsetBtnCambiarMaquinaEnabled>
                             <div class="col-12 col-md-2">
                                 <button type="button" class="mt-2 btn-icon btn-icon-only btn btn-info btn-block"
@@ -133,13 +136,14 @@
 
                             <div class="input-group">
                                 <input type="search" class="form-control" maxlength="7" placeholder="T000000"
-                                [(ngModel)]="codOperario"
-                                [ngModelOptions]="{standalone: true}" (keydown)="operario_KeyDown($event)" />
+                                    [(ngModel)]="codOperario" [ngModelOptions]="{standalone: true}" 
+                                    (keydown)="operario_KeyDown($event)" />
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-primary" (click)="formBuscarAsync()">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
+                                
                             </div>
 
                         </div>
@@ -179,7 +183,7 @@
                     <div class="row mb-0">
                         <div class="col-sm-12">
                             <div class="mud-table mud-xs-table mud-table-sticky-header mud-elevation-0">
-                                <div class="mud-table-container" >
+                                <div class="mud-table-container">
                                     <table class="thead-dark table-hover mud-table-root">
                                         <thead class="mud-table-head">
                                             <tr class="mud-table-row">
@@ -188,10 +192,10 @@
                                                 <th scope="col" class="mud-table-cell"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="mud-table-body" >
-                                            <tr  *ngFor="let item of ordenProcesoOperarioDTOs2.value;let i = index"
+                                        <tbody class="mud-table-body">
+                                            <tr *ngFor="let item of ordenProcesoOperarioDTOs2.value;let i = index"
                                                 class="mud-table-row">
-                                                <td data-titulo="Código" scope="col" class="mud-table-cell" >
+                                                <td data-titulo="Código" scope="col" class="mud-table-cell">
                                                     {{item.referencia}}
                                                 </td>
                                                 <td data-titulo="Nombres" scope="col" class="mud-table-cell">
@@ -209,8 +213,9 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="d-flex justify-content-center">
-                                        <!-- <ValidationMessageCustom For="@(() => OrdenParte.OrdenProcesoOperarioDTOs)" /> -->
+                                    <div class="d-flex justify-content-center"  *ngIf="ordenProcesoOperarioDTOs2.invalid 
+                                    && ordenProcesoOperarioDTOs2.errors?.required && formDir.submitted">
+                                        <em class="validation-message">Ingrese el operario.</em>
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +231,7 @@
                 <div class="widget-content row">
                     <div class="col-6">
                         <div class="widget-content-wrapper d-flex justify-content-left">
-                            <button type="submit" class="btn btn-lg btn-success btn-block"
+                            <button  type="submit" class="btn btn-lg btn-success btn-block"
                                 style="width: 12rem;height: 2.5rem;">GUARDAR</button>
                         </div>
                     </div>

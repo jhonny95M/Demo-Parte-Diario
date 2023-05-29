@@ -20,7 +20,7 @@
                 </div>
               </ng-container>
               <ng-container *ngIf="!mostrarEmpresa;else mostrarEmpresaElse">
-                <form (ngSubmit)="validateUser">
+                <form (ngSubmit)="validateUser()">
                   <!-- <DataAnnotationsValidator />
                                   <ValidationSummary /> -->
                                   <p>{{user.Pass}}</p>
@@ -56,7 +56,7 @@
                 </form>
               </ng-container>
               <ng-template #mostrarEmpresaElse>
-                <app-listado-empresa (OnAceptar)="enviarListadoEmpresa"
+                <app-listado-empresa (OnAceptar)="enviarListadoEmpresa($event)"
                   [perfilEmpresaDTOs]="perfilEmpresaDTOs"></app-listado-empresa>
               </ng-template>
             </div>

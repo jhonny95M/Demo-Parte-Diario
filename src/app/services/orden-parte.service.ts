@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OrdenParteDTO } from '../model/OrdenParteDTO';
 import { TrabajadorView } from '../model/TrabajadorView';
+import { AppSettings } from '../model/AppSettings';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class OrdenParteService {
   private token:string;
   constructor(private http:HttpClient)
   {
-    this.token=localStorage.getItem('token') as string;
+    this.token=localStorage.getItem(AppSettings.TOKEN) as string;
   }
   listarOrdenProcesoAsync(IdEmpresa: number, IdTipOrd: number, IdNumOrd: number, ItemProceso: number): Observable<OrdenParteDTO> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);

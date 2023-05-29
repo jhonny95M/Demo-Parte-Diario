@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ClaimsData } from './interface/ClaimsData ';
+import { AppSettings } from './model/AppSettings';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit{
   title = 'parte-diario';
   constructor(private router: Router, private jwtHelper: JwtHelperService) { }
   ngOnInit() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(AppSettings.TOKEN);
     console.log(token);
   try {
     let claims= this.jwtHelper.decodeToken<ClaimsData>(token+""); 
